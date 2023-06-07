@@ -1,0 +1,9 @@
+.info-center {
+  text-align: center;
+  align-items: center;
+}
+
+.info-border {
+  border-radius: 5px;
+  border: 1px solid #333;
+}

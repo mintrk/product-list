@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ProductInfo from "./ProductInfo";
 import "./Product.css";
 
 type Product = {
@@ -41,12 +42,16 @@ const Product = () => {
   const [addProductUI, isAddProductUI] = useState(false);
   const [editProductUI, isEditProductUI] = useState(false);
   const [productUI, isProductUI] = useState(true);
+  const [productInfoUI, isProductInfoUI] = useState(false);
 
   const [editProductName, setEditProductName] = useState("");
   const [editProductDetail, setEditProductDetail] = useState("");
   const [editProductPrice, setEditProductPrice] = useState(0);
   const [editProductImage, setEditProductImage] = useState("");
+
   const [editIndex, setEditIndex] = useState<Number>(-1);
+
+  const [currentProduct, setCurrentProduct] = useState<Product>();
 
   const clickAdd = () => {
     isAddProductUI(!addProductUI);
@@ -157,6 +162,22 @@ const Product = () => {
     setProductImage("");
   };
 
+  const productClick = () => {
+    isProductInfoUI(!productInfoUI);
+    isProductUI(!productUI);
+  };
+
+  const showProductInfo = (index: Number) => {
+    products.map((product, i) => {
+      if (index === i) {
+        setCurrentProduct(product);
+        console.log(product);
+      }
+    });
+    isProductInfoUI(!productInfoUI);
+    isProductUI(false);
+    isAddProductUI(false);
+  };
   return (
     <div className="product" id="product">
       <h1>This is Product</h1>
@@ -229,7 +250,7 @@ const Product = () => {
         </div>
       )}
 
-      {!addProductUI && (
+      {!addProductUI && !productInfoUI && (
         <button
           onClick={() => {
             clickAdd();
@@ -244,7 +265,12 @@ const Product = () => {
           <div className="row">
             {products.map((product, index) => (
               <div key={index} className="card col-md-3 col-sm-6">
-                <img src={product.imageUrl} />
+                <img
+                  src={product.imageUrl}
+                  onClick={() => {
+                    showProductInfo(index);
+                  }}
+                />
                 <div className="card-body">
                   <h2>{product.name}</h2>
                   <p>Detail : {product.detail}</p>
@@ -270,6 +296,11 @@ const Product = () => {
             ))}
           </div>
         </div>
+      )}
+
+      {productInfoUI && !editProductUI && currentProduct && (
+        // <p>{currentProduct?.name}</p>
+        <ProductInfo productClick={productClick} productSend={currentProduct} />
       )}
 
       {editProductUI && (
@@ -348,5 +379,4 @@ const Product = () => {
     </div>
   );
 };
-
 export default Product;
