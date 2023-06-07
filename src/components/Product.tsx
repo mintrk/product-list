@@ -158,7 +158,7 @@ const Product = () => {
   };
 
   return (
-    <div className="product">
+    <div className="product" id="product">
       <h1>This is Product</h1>
 
       {addProductUI && (

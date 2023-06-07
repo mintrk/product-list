@@ -1,8 +1,17 @@
-const Nav = () => {
+import { scroller } from "react-scroll";
+
+function Nav() {
+  const scrollToSection = (sectionName: string) => {
+    scroller.scrollTo(sectionName, {
+      duration: 50,
+      delay: 0,
+      smooth: "true",
+    });
+  };
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav className="navbar navbar-expand-lg bg-body-tertiary" id="nav">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">
+        <a className="navbar-brand" onClick={() => scrollToSection("nav")}>
           Navbar
         </a>
         <button
@@ -18,21 +27,20 @@ const Nav = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
-            <a className="nav-link active" aria-current="page" href="#">
-              Home
+            <a
+              className="nav-link active"
+              aria-current="page"
+              onClick={() => scrollToSection("about")}
+            >
+              About
             </a>
-            <a className="nav-link" href="#">
-              Features
+            <a className="nav-link" onClick={() => scrollToSection("product")}>
+              Product
             </a>
-            <a className="nav-link" href="#">
-              Pricing
-            </a>
-            <a className="nav-link disabled">Disabled</a>
           </div>
         </div>
       </div>
     </nav>
   );
-};
-
+}
 export default Nav;

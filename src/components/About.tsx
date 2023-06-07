@@ -1,8 +1,16 @@
 import "./About.css";
+import { scroller } from "react-scroll";
 
 const About = () => {
+  const scrollToSection = (sectionName: string) => {
+    scroller.scrollTo(sectionName, {
+      duration: 50,
+      delay: 0,
+      smooth: "true",
+    });
+  };
   return (
-    <div className="container-fluid">
+    <div className="container-fluid" id="about">
       <div className="row">
         <div className="col-md-12">
           <div className="jumbotron about">
@@ -15,8 +23,11 @@ const About = () => {
               voluptatum iusto! Fugiat, laboriosam!
             </p>
             <p>
-              <a className="btn btn-primary btn-large" href="/Product">
-                Learn more
+              <a
+                className="btn btn-primary btn-large"
+                onClick={() => scrollToSection("product")}
+              >
+                See all Products
               </a>
             </p>
           </div>

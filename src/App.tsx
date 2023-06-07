@@ -7,8 +7,8 @@ import Nav from "./components/Nav";
 function App() {
   return (
     <>
-      {/* <Nav />
-      <About /> */}
+      <Nav />
+      <About />
       <Product />
     </>
   );
