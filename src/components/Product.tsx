@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ProductInfo from "./ProductInfo";
+import AddProduct from "./AddProduct";
 import "./Product.css";
 
 type Product = {
@@ -34,24 +35,13 @@ const Product = () => {
   ];
   const [products, setProducts] = useState<Product[]>(defaultProduct);
 
-  const [productName, setProductName] = useState("");
-  const [productDetail, setProductDetail] = useState("");
-  const [productPrice, setProductPrice] = useState(0);
-  const [productImage, setProductImage] = useState("");
-
   const [addProductUI, isAddProductUI] = useState(false);
   const [editProductUI, isEditProductUI] = useState(false);
   const [productUI, isProductUI] = useState(true);
   const [productInfoUI, isProductInfoUI] = useState(false);
 
-  const [editProductName, setEditProductName] = useState("");
-  const [editProductDetail, setEditProductDetail] = useState("");
-  const [editProductPrice, setEditProductPrice] = useState(0);
-  const [editProductImage, setEditProductImage] = useState("");
-
   const [editIndex, setEditIndex] = useState<Number>(-1);
-
-  const [currentProduct, setCurrentProduct] = useState<Product>();
+  const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
 
   const clickAdd = () => {
     isAddProductUI(!addProductUI);
@@ -59,10 +49,7 @@ const Product = () => {
   };
 
   const handleDelete = (index: Number) => {
-    console.log(index);
-
     const newProducts = products.filter((_, i) => index !== i);
-    console.log(newProducts);
     setProducts(newProducts);
   };
 
@@ -71,10 +58,7 @@ const Product = () => {
     setEditIndex(productIndex);
     products.map((products, i) => {
       if (productIndex === i) {
-        setEditProductName(products.name);
-        setEditProductDetail(products.detail);
-        setEditProductPrice(products.price);
-        setEditProductImage(products.imageUrl);
+        setCurrentProduct(products);
       }
     });
     isEditProductUI(!editProductUI);
@@ -88,78 +72,18 @@ const Product = () => {
     console.log("editIndex (at cancel)-> ", editIndex);
   };
 
-  const handleUpdate = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const newProduct = {
-      name: editProductName,
-      detail: editProductDetail,
-      price: editProductPrice,
-      imageUrl:
-        editProductImage ||
-        "https://static.vecteezy.com/system/resources/previews/000/702/530/original/hand-holding-shopping-bags-vector.jpg",
-    };
-    console.log(newProduct);
-    console.log("editIndex (at cancel)-> ", editIndex);
-    console.log("products -> ", products);
-    const updatedProduct = products.map((product, index) =>
-      index === editIndex ? newProduct : product
+  const handleUpdateProduct = (updatedProduct: Product) => {
+    const newProduct = products.map((product, index) =>
+      index === editIndex ? updatedProduct : product
     );
-    setProducts(updatedProduct);
-
+    setProducts(newProduct);
     isEditProductUI(!editProductUI);
     isProductUI(!productUI);
+    setCurrentProduct(null);
   };
 
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setProductName(event.target.value);
-  };
-  const handleDetailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setProductDetail(event.target.value);
-  };
-  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setProductPrice(Number(event.target.value));
-  };
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setProductImage(event.target.value);
-  };
-
-  const handleEditNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditProductName(event.target.value);
-  };
-  const handleEditDetailChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setEditProductDetail(event.target.value);
-  };
-  const handleEditPriceChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setEditProductPrice(Number(event.target.value));
-  };
-  const handleEditImageChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setEditProductImage(event.target.value);
-  };
-
-  const handleAddProduct = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const newProduct = {
-      name: productName,
-      detail: productDetail,
-      price: productPrice,
-      imageUrl:
-        productImage ||
-        "https://static.vecteezy.com/system/resources/previews/000/702/530/original/hand-holding-shopping-bags-vector.jpg",
-    };
-    console.log(newProduct);
-
-    setProducts([...products, newProduct]);
-
-    setProductName("");
-    setProductDetail("");
-    setProductPrice(0);
-    setProductImage("");
+  const handleAddProduct = (product: Product) => {
+    setProducts([...products, product]);
   };
 
   const productClick = () => {
@@ -183,79 +107,14 @@ const Product = () => {
       <h1>This is Product</h1>
 
       {addProductUI && (
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-md-12">
-              <form onSubmit={handleAddProduct}>
-                {/* Name */}
-                <div className="form-group">
-                  <label>Product: </label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    placeholder="input name"
-                    className="form-control"
-                    onChange={handleNameChange}
-                    value={productName}
-                    required
-                  />
-                </div>
-                {/* Price */}
-                <div className="form-group">
-                  <label>Price: </label>
-                  <input
-                    type="number"
-                    name="price"
-                    id="price"
-                    placeholder="input price"
-                    className="form-control"
-                    onChange={handlePriceChange}
-                    value={productPrice}
-                    required
-                  />
-                </div>
-                {/* Detail */}
-                <div className="form-group">
-                  <label>Details: </label>
-                  <input
-                    type="text"
-                    name="detail"
-                    id="detail"
-                    placeholder="input details"
-                    className="form-control"
-                    onChange={handleDetailChange}
-                    value={productDetail}
-                    required
-                  />
-                </div>
-                {/* Image url */}
-                <div className="form-group">
-                  <label>Image Url: </label>
-                  <input
-                    type="text"
-                    name="imageUrl"
-                    id="imageUrl"
-                    placeholder="input image url"
-                    className="form-control"
-                    onChange={handleImageChange}
-                    value={productImage}
-                  />
-                </div>
-                <button type="submit">Add</button>
-                <button onClick={clickAdd}>Cancel</button>
-              </form>
-            </div>
-          </div>
-        </div>
+        <AddProduct onSubmit={handleAddProduct} onCancel={clickAdd} />
       )}
 
       {!addProductUI && !productInfoUI && (
         <button
           onClick={() => {
             clickAdd();
-          }}
-        >
+          }}>
           Add Product
         </button>
       )}
@@ -278,15 +137,13 @@ const Product = () => {
                   <button
                     onClick={() => {
                       handleDelete(index);
-                    }}
-                  >
+                    }}>
                     Delete
                   </button>
                   <button
                     onClick={() => {
                       handleEditButton(index);
-                    }}
-                  >
+                    }}>
                     Edit
                   </button>
 
@@ -299,81 +156,15 @@ const Product = () => {
       )}
 
       {productInfoUI && !editProductUI && currentProduct && (
-        // <p>{currentProduct?.name}</p>
         <ProductInfo productClick={productClick} productSend={currentProduct} />
       )}
 
-      {editProductUI && (
-        <div>
-          <h1>Edit</h1>
-          {/*  */}
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-md-12">
-                <form onSubmit={handleUpdate}>
-                  {/* Name */}
-                  <div className="form-group">
-                    <label>Product: </label>
-                    <input
-                      type="text"
-                      name="name"
-                      id="name"
-                      placeholder="input name"
-                      className="form-control"
-                      onChange={handleEditNameChange}
-                      value={editProductName}
-                      required
-                    />
-                  </div>
-                  {/* Price */}
-                  <div className="form-group">
-                    <label>Price: </label>
-                    <input
-                      type="number"
-                      name="price"
-                      id="price"
-                      placeholder="input price"
-                      className="form-control"
-                      onChange={handleEditPriceChange}
-                      value={editProductPrice}
-                      required
-                    />
-                  </div>
-                  {/* Detail */}
-                  <div className="form-group">
-                    <label>Details: </label>
-                    <input
-                      type="text"
-                      name="detail"
-                      id="detail"
-                      placeholder="input details"
-                      className="form-control"
-                      onChange={handleEditDetailChange}
-                      value={editProductDetail}
-                      required
-                    />
-                  </div>
-                  {/* Image url */}
-                  <div className="form-group">
-                    <label>Image Url: </label>
-                    <input
-                      type="text"
-                      name="imageUrl"
-                      id="imageUrl"
-                      placeholder="input image url"
-                      className="form-control"
-                      onChange={handleEditImageChange}
-                      value={editProductImage}
-                    />
-                  </div>
-                  <button type="submit">Update</button>
-                  <button onClick={handleCancleEdit}>Cancel</button>
-                </form>
-              </div>
-            </div>
-          </div>
-          {/*  */}
-        </div>
+      {editProductUI && currentProduct && (
+        <AddProduct
+          product={currentProduct}
+          onSubmit={handleUpdateProduct}
+          onCancel={handleCancleEdit}
+        />
       )}
       {/*  */}
     </div>
