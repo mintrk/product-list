@@ -42,7 +42,6 @@ const Product = () => {
   const [editProductUI, isEditProductUI] = useState(false);
   const [productUI, isProductUI] = useState(true);
 
-  const [editProducts, setEditProducts] = useState<Product[]>([]);
   const [editProductName, setEditProductName] = useState("");
   const [editProductDetail, setEditProductDetail] = useState("");
   const [editProductPrice, setEditProductPrice] = useState(0);
@@ -84,7 +83,7 @@ const Product = () => {
     console.log("editIndex (at cancel)-> ", editIndex);
   };
 
-  const handleUpdate = (event: SubmitEvent) => {
+  const handleUpdate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const newProduct = {
       name: editProductName,
@@ -138,7 +137,7 @@ const Product = () => {
     setEditProductImage(event.target.value);
   };
 
-  const handleAddProduct = (event: SubmitEvent) => {
+  const handleAddProduct = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const newProduct = {
       name: productName,
