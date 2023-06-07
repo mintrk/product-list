@@ -56,7 +56,7 @@ const Product = () => {
   const handleDelete = (index: Number) => {
     console.log(index);
 
-    const newProducts = products.filter((product, i) => index !== i);
+    const newProducts = products.filter((_, i) => index !== i);
     console.log(newProducts);
     setProducts(newProducts);
   };
