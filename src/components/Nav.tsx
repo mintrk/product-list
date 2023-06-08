@@ -9,38 +9,49 @@ function Nav() {
     });
   };
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary" id="nav">
-      <div className="container-fluid">
-        <a className="navbar-brand" onClick={() => scrollToSection("nav")}>
-          Navbar
-        </a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div className="navbar-nav">
-            <a
-              className="nav-link active"
-              aria-current="page"
-              onClick={() => scrollToSection("about")}
-            >
-              About
-            </a>
-            <a className="nav-link" onClick={() => scrollToSection("product")}>
-              Product
-            </a>
-          </div>
-        </div>
-      </div>
-    </nav>
+    // <nav className="navbar navbar-expand-lg bg-body-tertiary" id="nav">
+    //   <div className="container-fluid">
+
+    //     <div className="collapse navbar-collapse">
+    //       <div className="navbar-nav">
+    //         <a
+    //           className="nav-link active"
+    //           onClick={() => scrollToSection("about")}
+    //         >
+    //           About
+    //         </a>
+
+    //       </div>
+    //     </div>
+    //   </div>
+    // </nav>
+
+    <header className="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+      <a
+        href="/"
+        className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"
+      >
+        <svg className="bi me-2" width={40} height={32}>
+          <use xlinkHref="#bootstrap" />
+        </svg>
+        <span className="fs-4">SHUPSHOP</span>
+      </a>
+      <ul className="nav nav-pills">
+        <li className="nav-item">
+          <a
+            className="nav-link active"
+            onClick={() => scrollToSection("about")}
+          >
+            Home
+          </a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" onClick={() => scrollToSection("product")}>
+            Product
+          </a>
+        </li>
+      </ul>
+    </header>
   );
 }
 export default Nav;

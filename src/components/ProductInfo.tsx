@@ -7,18 +7,18 @@ type Product = {
 };
 
 interface Props {
-  productClick: () => void;
+  handleProductClick: () => void;
   productSend: Product;
 }
 
-const ProductInfo = ({ productClick, productSend }: Props) => {
+const ProductInfo = ({ handleProductClick, productSend }: Props) => {
   return (
     <div className="container-fluid info-border info-center">
       <img src={productSend.imageUrl} alt="image" style={{ width: "300px" }} />
       <h1>{productSend.name}</h1>
       <p>{productSend.detail}</p>
       <h5>{productSend.price}</h5>
-      <button onClick={productClick}>X</button>
+      <button onClick={handleProductClick}>X</button>
     </div>
   );
 };

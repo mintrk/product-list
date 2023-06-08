@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ProductInfo from "./ProductInfo";
-import AddProduct from "./AddProduct";
+import AddEditProduct from "./AddEditProduct";
 import "./Product.css";
 
 type Product = {
@@ -32,6 +32,13 @@ const Product = () => {
       imageUrl:
         "https://www.nongchatmakeup.com/wp-content/uploads/2021/09/new-High-Technique-Duo-Eyeliner-_taupe-brown-20.jpg",
     },
+    {
+      name: "Palette",
+      detail: "cosmetic (brown theme)",
+      price: 499,
+      imageUrl:
+        "https://cdn.shopify.com/s/files/1/1583/0411/products/eyeshadow2020_1_1024x.jpg?v=1662647787",
+    },
   ];
   const [products, setProducts] = useState<Product[]>(defaultProduct);
 
@@ -43,7 +50,7 @@ const Product = () => {
   const [editIndex, setEditIndex] = useState<Number>(-1);
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
 
-  const clickAdd = () => {
+  const handleClickAdd = () => {
     isAddProductUI(!addProductUI);
     console.log(addProductUI);
   };
@@ -86,7 +93,7 @@ const Product = () => {
     setProducts([...products, product]);
   };
 
-  const productClick = () => {
+  const handleProductClick = () => {
     isProductInfoUI(!productInfoUI);
     isProductUI(!productUI);
   };
@@ -104,23 +111,25 @@ const Product = () => {
   };
   return (
     <div className="product" id="product">
-      <h1>This is Product</h1>
+      <h1>All Products</h1>
 
       {addProductUI && (
-        <AddProduct onSubmit={handleAddProduct} onCancel={clickAdd} />
+        <AddEditProduct onSubmit={handleAddProduct} onCancel={handleClickAdd} />
       )}
 
       {!addProductUI && !productInfoUI && (
         <button
           onClick={() => {
-            clickAdd();
-          }}>
+            handleClickAdd();
+          }}
+          className="btn btn-dark"
+        >
           Add Product
         </button>
       )}
 
       {productUI && (
-        <div className="container-fluid">
+        <div className="container-fluid text-center">
           <div className="row">
             {products.map((product, index) => (
               <div key={index} className="card col-md-3 col-sm-6">
@@ -136,17 +145,20 @@ const Product = () => {
                   <h4>Price : {product.price}</h4>
                   <button
                     onClick={() => {
-                      handleDelete(index);
-                    }}>
-                    Delete
-                  </button>
+                      handleEditButton(index);
+                    }}
+                    className="btn btn-warning"
+                  >
+                    Edit
+                  </button>{" "}
                   <button
                     onClick={() => {
-                      handleEditButton(index);
-                    }}>
-                    Edit
+                      handleDelete(index);
+                    }}
+                    className="btn btn-danger"
+                  >
+                    Delete
                   </button>
-
                   {/*  */}
                 </div>
               </div>
@@ -156,11 +168,14 @@ const Product = () => {
       )}
 
       {productInfoUI && !editProductUI && currentProduct && (
-        <ProductInfo productClick={productClick} productSend={currentProduct} />
+        <ProductInfo
+          handleProductClick={handleProductClick}
+          productSend={currentProduct}
+        />
       )}
 
       {editProductUI && currentProduct && (
-        <AddProduct
+        <AddEditProduct
           product={currentProduct}
           onSubmit={handleUpdateProduct}
           onCancel={handleCancleEdit}

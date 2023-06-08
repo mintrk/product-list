@@ -7,13 +7,13 @@ type Product = {
   imageUrl: string;
 };
 
-type AddProductProps = {
+type AddEditProductProps = {
   product?: Product;
   onSubmit: (product: Product) => void;
   onCancel: () => void;
 };
 
-const AddProduct: React.FC<AddProductProps> = ({
+const AddEditProduct: React.FC<AddEditProductProps> = ({
   product,
   onSubmit,
   onCancel,
@@ -102,8 +102,12 @@ const AddProduct: React.FC<AddProductProps> = ({
                 value={productImage}
               />
             </div>
-            <button type="submit">{product ? "Update" : "Add"}</button>
-            <button onClick={onCancel}>Cancel</button>
+            <button type="submit" className="btn btn-dark">
+              {product ? "Update" : "Add"}
+            </button>
+            <button onClick={onCancel} className="btn btn-light">
+              Cancel
+            </button>
           </form>
         </div>
       </div>
@@ -111,4 +115,4 @@ const AddProduct: React.FC<AddProductProps> = ({
   );
 };
 
-export default AddProduct;
+export default AddEditProduct;
