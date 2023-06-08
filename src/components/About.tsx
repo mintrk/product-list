@@ -10,17 +10,29 @@ const About = () => {
     });
   };
   return (
-    <div className="container-fluid" id="about">
+    <div
+      className="container-fluid d-flex justify-content-center align-items-center"
+      id="about"
+      style={{
+        height: "500px",
+        backgroundImage:
+          "url(https://images.pexels.com/photos/2113855/pexels-photo-2113855.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2)",
+        padding: "0",
+        margin: "0",
+      }}
+    >
       <div className="row">
         <div className="col-md-12">
           <div className="jumbotron about">
-            <h2>Welcome, hope you enjoy shopping!</h2>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio
-              delectus optio in nostrum ab. Mollitia velit voluptatem debitis
-              est pariatur, repellat excepturi iure quis, animi enim cupiditate,
-              eos placeat illo quas laborum repellendus incidunt dolor in
-              voluptatum iusto! Fugiat, laboriosam!
+            <h1
+              className="display-1 fw-bold"
+              style={{ textShadow: "0px 0px 3px #5E5E5E" }}
+            >
+              SHUPSHOP
+            </h1>
+            <p className="fs-6">
+              "Whoever said money can't buy happiness simply didn't know where
+              to go shopping."
             </p>
             <p>
               <a

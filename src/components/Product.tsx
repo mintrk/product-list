@@ -1,7 +1,10 @@
 import { useState } from "react";
 import ProductInfo from "./ProductInfo";
 import AddEditProduct from "./AddEditProduct";
+import ConfirmDelete from "./ConfirmDelete";
 import "./Product.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 type Product = {
   name: string;
@@ -44,10 +47,11 @@ const Product = () => {
 
   const [addProductUI, isAddProductUI] = useState(false);
   const [editProductUI, isEditProductUI] = useState(false);
-  const [productUI, isProductUI] = useState(true);
+  // const [productUI, isProductUI] = useState(true);
   const [productInfoUI, isProductInfoUI] = useState(false);
+  const [confirmModal, isConfirmModal] = useState(false);
 
-  const [editIndex, setEditIndex] = useState<Number>(-1);
+  const [currentIndex, setCurrentIndex] = useState<Number>(-1);
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
 
   const handleClickAdd = () => {
@@ -55,47 +59,67 @@ const Product = () => {
     console.log(addProductUI);
   };
 
-  const handleDelete = (index: Number) => {
-    const newProducts = products.filter((_, i) => index !== i);
+  const handleDelete = () => {
+    const newProducts = products.filter((_, i) => currentIndex !== i);
+    setCurrentProduct(null);
     setProducts(newProducts);
+    isConfirmModal(false);
+  };
+
+  const handleCancelDelete = () => {
+    setCurrentProduct(null);
+    isConfirmModal(false);
+  };
+
+  const handelConfirmDelete = (index: Number) => {
+    let productIndex: Number = index;
+    setCurrentIndex(productIndex);
+    products.map((products, i) => {
+      if (productIndex === i) {
+        setCurrentProduct(products);
+        isConfirmModal(true);
+      }
+    });
   };
 
   const handleEditButton = (index: Number) => {
     let productIndex: Number = index;
-    setEditIndex(productIndex);
+    setCurrentIndex(productIndex);
     products.map((products, i) => {
       if (productIndex === i) {
         setCurrentProduct(products);
       }
     });
     isEditProductUI(!editProductUI);
-    isProductUI(!productUI);
+    // isProductUI(!productUI);
     isAddProductUI(false);
   };
 
   const handleCancleEdit = () => {
     isEditProductUI(!editProductUI);
-    isProductUI(!productUI);
-    console.log("editIndex (at cancel)-> ", editIndex);
+    setCurrentProduct(null);
+    // isProductUI(!productUI);
+    // console.log("editIndex (at cancel)-> ", editIndex);
   };
 
   const handleUpdateProduct = (updatedProduct: Product) => {
     const newProduct = products.map((product, index) =>
-      index === editIndex ? updatedProduct : product
+      index === currentIndex ? updatedProduct : product
     );
     setProducts(newProduct);
     isEditProductUI(!editProductUI);
-    isProductUI(!productUI);
+    // isProductUI(!productUI);
     setCurrentProduct(null);
   };
 
   const handleAddProduct = (product: Product) => {
     setProducts([...products, product]);
+    isAddProductUI(!addProductUI);
   };
 
   const handleProductClick = () => {
     isProductInfoUI(!productInfoUI);
-    isProductUI(!productUI);
+    // isProductUI(!productUI);
   };
 
   const showProductInfo = (index: Number) => {
@@ -106,33 +130,44 @@ const Product = () => {
       }
     });
     isProductInfoUI(!productInfoUI);
-    isProductUI(false);
+    // isProductUI(false);
     isAddProductUI(false);
   };
   return (
     <div className="product" id="product">
-      <h1>All Products</h1>
+      <div className="container-fluid mt-4">
+        <div className="row justify-content-between">
+          <div className="col d-flex align-items-center position-relative">
+            <h1
+              style={{ marginLeft: "1rem" }}
+              className="top-50 start-0 fw-bold"
+            >
+              Products List
+            </h1>
+          </div>
+          <div className="col d-flex align-items-center position-relative">
+            <button
+              onClick={() => {
+                handleClickAdd();
+              }}
+              className="btn btn-dark position-absolute top-50 end-0 translate-middle-y"
+              style={{ marginRight: "1rem" }}
+            >
+              Add Product{" "}
+              <FontAwesomeIcon icon={faPlus} style={{ marginLeft: "0.5rem" }} />
+            </button>
+          </div>
+        </div>
+      </div>
 
       {addProductUI && (
         <AddEditProduct onSubmit={handleAddProduct} onCancel={handleClickAdd} />
       )}
-
-      {!addProductUI && !productInfoUI && (
-        <button
-          onClick={() => {
-            handleClickAdd();
-          }}
-          className="btn btn-dark"
-        >
-          Add Product
-        </button>
-      )}
-
-      {productUI && (
-        <div className="container-fluid text-center">
-          <div className="row">
-            {products.map((product, index) => (
-              <div key={index} className="card col-md-3 col-sm-6">
+      <div className="container-fluid text-center">
+        <div className="row ">
+          {products.map((product, index) => (
+            <div key={index} className="col-md-3 col-sm-6 ">
+              <div className="card product-card">
                 <img
                   src={product.imageUrl}
                   onClick={() => {
@@ -140,9 +175,9 @@ const Product = () => {
                   }}
                 />
                 <div className="card-body">
-                  <h2>{product.name}</h2>
+                  <h3>{product.name}</h3>
                   <p>Detail : {product.detail}</p>
-                  <h4>Price : {product.price}</h4>
+                  <h5>Price : {product.price} THB</h5>
                   <button
                     onClick={() => {
                       handleEditButton(index);
@@ -153,7 +188,7 @@ const Product = () => {
                   </button>{" "}
                   <button
                     onClick={() => {
-                      handleDelete(index);
+                      handelConfirmDelete(index);
                     }}
                     className="btn btn-danger"
                   >
@@ -162,9 +197,18 @@ const Product = () => {
                   {/*  */}
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
+      </div>
+
+      {confirmModal && currentProduct && (
+        <ConfirmDelete
+          handleDelete={handleDelete}
+          onCancel={handleCancelDelete}
+        >
+          Product : {currentProduct.name}
+        </ConfirmDelete>
       )}
 
       {productInfoUI && !editProductUI && currentProduct && (
