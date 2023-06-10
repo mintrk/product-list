@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 
 type Product = {
@@ -21,27 +21,101 @@ const AddEditProduct = ({
 }: AddEditProductProps) => {
   const [productName, setProductName] = useState(product?.name || "");
   const [productDetail, setProductDetail] = useState(product?.detail || "");
-  const [productPrice, setProductPrice] = useState(product?.price || 0);
+  const [productPrice, setProductPrice] = useState(product?.price || "");
   const [productImage, setProductImage] = useState(product?.imageUrl || "");
+
+  const [validateName, setValidateName] = useState({
+    status: false,
+    message: "",
+    color: "",
+  });
+  const [validateDetail, setValidateDetail] = useState({
+    status: false,
+    message: "",
+    color: "",
+  });
+  const [validatePrice, setValidatePrice] = useState({
+    status: false,
+    message: "",
+    color: "",
+  });
+
+  // useEffect(() => {
+  //   // Perform validation whenever the relevant state variables change
+  //   validateFields();
+  // }, [productName, productDetail, productPrice]);
+
+  const validateFields = () => {
+    let valid = true;
+
+    if (productName.trim() === "") {
+      setValidateName({
+        status: false,
+        message: "Please enter your product name",
+        color: "red",
+      });
+      valid = false;
+    } else {
+      setValidateName({
+        status: true,
+        message: "",
+        color: "green",
+      });
+    }
+
+    if (productDetail.trim() === "") {
+      setValidateDetail({
+        status: false,
+        message: "Please enter your product details",
+        color: "red",
+      });
+      valid = false;
+    } else {
+      setValidateDetail({
+        status: true,
+        message: "",
+        color: "green",
+      });
+    }
+
+    if (productPrice === "" || productPrice === "0") {
+      setValidatePrice({
+        status: false,
+        message: "Please enter your product price",
+        color: "red",
+      });
+      valid = false;
+    } else {
+      setValidatePrice({
+        status: true,
+        message: "",
+        color: "green",
+      });
+    }
+
+    return valid;
+  };
 
   const handleAddProduct = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const newProduct = {
-      name: productName,
-      detail: productDetail,
-      price: productPrice,
-      imageUrl:
-        productImage ||
-        "https://static.vecteezy.com/system/resources/previews/000/702/530/original/hand-holding-shopping-bags-vector.jpg",
-    };
-    console.log(newProduct);
 
-    onSubmit(newProduct);
+    if (validateFields()) {
+      const newProduct = {
+        name: productName,
+        detail: productDetail,
+        price: Number(productPrice),
+        imageUrl:
+          productImage ||
+          "https://static.vecteezy.com/system/resources/previews/000/702/530/original/hand-holding-shopping-bags-vector.jpg",
+      };
 
-    setProductName("");
-    setProductDetail("");
-    setProductPrice(0);
-    setProductImage("");
+      onSubmit(newProduct);
+
+      setProductName("");
+      setProductDetail("");
+      setProductPrice("");
+      setProductImage("");
+    }
   };
 
   const handleCancel = () => {
@@ -60,7 +134,10 @@ const AddEditProduct = ({
         <form onSubmit={handleAddProduct}>
           {/* Name */}
           <div className="form-group">
-            <label>Product: </label>
+            <label>
+              Product:{" "}
+              <span style={{ color: "red" }}>{validateName.message}</span>
+            </label>
             <input
               type="text"
               name="name"
@@ -69,12 +146,15 @@ const AddEditProduct = ({
               className="form-control"
               onChange={(e) => setProductName(e.target.value)}
               value={productName}
-              required
+              style={{ borderColor: validateName.color }}
             />
           </div>
           {/* Price */}
           <div className="form-group">
-            <label>Price: </label>
+            <label>
+              Price:{" "}
+              <span style={{ color: "red" }}>{validatePrice.message}</span>
+            </label>
             <input
               type="number"
               name="price"
@@ -83,12 +163,15 @@ const AddEditProduct = ({
               className="form-control"
               onChange={(e) => setProductPrice(Number(e.target.value))}
               value={productPrice}
-              required
+              style={{ borderColor: validatePrice.color }}
             />
           </div>
           {/* Detail */}
           <div className="form-group">
-            <label>Details: </label>
+            <label>
+              Details:{" "}
+              <span style={{ color: "red" }}>{validateDetail.message}</span>
+            </label>
             <input
               type="text"
               name="detail"
@@ -97,7 +180,7 @@ const AddEditProduct = ({
               className="form-control"
               onChange={(e) => setProductDetail(e.target.value)}
               value={productDetail}
-              required
+              style={{ borderColor: validateDetail.color }}
             />
           </div>
           {/* Image url */}
@@ -117,8 +200,7 @@ const AddEditProduct = ({
             type="submit"
             variant="dark"
             className="mt-2"
-            style={{ marginRight: "1rem" }}
-          >
+            style={{ marginRight: "1rem" }}>
             {product ? "Update" : "Add"}
           </Button>
           <Button variant="light" onClick={handleCancel} className="mt-2">

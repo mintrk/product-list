@@ -47,7 +47,6 @@ const Product = () => {
 
   const [addProductUI, isAddProductUI] = useState(false);
   const [editProductUI, isEditProductUI] = useState(false);
-  // const [productUI, isProductUI] = useState(true);
   const [productInfoUI, isProductInfoUI] = useState(false);
   const [confirmModal, isConfirmModal] = useState(false);
 
@@ -91,15 +90,12 @@ const Product = () => {
       }
     });
     isEditProductUI(!editProductUI);
-    // isProductUI(!productUI);
     isAddProductUI(false);
   };
 
   const handleCancleEdit = () => {
     isEditProductUI(!editProductUI);
     setCurrentProduct(null);
-    // isProductUI(!productUI);
-    // console.log("editIndex (at cancel)-> ", editIndex);
   };
 
   const handleUpdateProduct = (updatedProduct: Product) => {
@@ -108,7 +104,6 @@ const Product = () => {
     );
     setProducts(newProduct);
     isEditProductUI(!editProductUI);
-    // isProductUI(!productUI);
     setCurrentProduct(null);
   };
 
@@ -119,7 +114,6 @@ const Product = () => {
 
   const handleProductClick = () => {
     isProductInfoUI(!productInfoUI);
-    // isProductUI(!productUI);
   };
 
   const showProductInfo = (index: Number) => {
@@ -130,7 +124,6 @@ const Product = () => {
       }
     });
     isProductInfoUI(!productInfoUI);
-    // isProductUI(false);
     isAddProductUI(false);
   };
   return (
@@ -140,8 +133,7 @@ const Product = () => {
           <div className="col d-flex align-items-center position-relative">
             <h1
               style={{ marginLeft: "1rem" }}
-              className="top-50 start-0 fw-bold"
-            >
+              className="top-50 start-0 fw-bold">
               Products List
             </h1>
           </div>
@@ -151,8 +143,7 @@ const Product = () => {
                 handleClickAdd();
               }}
               className="btn btn-dark position-absolute top-50 end-0 translate-middle-y"
-              style={{ marginRight: "1rem" }}
-            >
+              style={{ marginRight: "1rem" }}>
               Add Product{" "}
               <FontAwesomeIcon icon={faPlus} style={{ marginLeft: "0.5rem" }} />
             </button>
@@ -163,16 +154,21 @@ const Product = () => {
       {addProductUI && (
         <AddEditProduct onSubmit={handleAddProduct} onCancel={handleClickAdd} />
       )}
+
       <div className="container-fluid text-center">
         <div className="row ">
           {products.map((product, index) => (
-            <div key={index} className="col-md-3 col-sm-6 ">
-              <div className="card product-card">
+            <div key={index} className="col-md-3 col-sm-6 my-3">
+              <div className="card product-card h-100 ">
                 <img
                   src={product.imageUrl}
                   onClick={() => {
                     showProductInfo(index);
                   }}
+                  style={{
+                    margin: "0.5rem",
+                  }}
+                  className="img-fluid rounded h-100"
                 />
                 <div className="card-body">
                   <h3>{product.name}</h3>
@@ -182,16 +178,14 @@ const Product = () => {
                     onClick={() => {
                       handleEditButton(index);
                     }}
-                    className="btn btn-warning"
-                  >
+                    className="btn btn-warning">
                     Edit
                   </button>{" "}
                   <button
                     onClick={() => {
                       handelConfirmDelete(index);
                     }}
-                    className="btn btn-danger"
-                  >
+                    className="btn btn-danger">
                     Delete
                   </button>
                   {/*  */}
@@ -205,8 +199,7 @@ const Product = () => {
       {confirmModal && currentProduct && (
         <ConfirmDelete
           handleDelete={handleDelete}
-          onCancel={handleCancelDelete}
-        >
+          onCancel={handleCancelDelete}>
           Product : {currentProduct.name}
         </ConfirmDelete>
       )}
