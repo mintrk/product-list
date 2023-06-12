@@ -18,7 +18,8 @@ const ProductInfo = ({ handleProductClick, productSend }: Props) => {
     <Modal
       show={true}
       onHide={handleProductClick}
-      style={{ textAlign: "center" }}>
+      style={{ textAlign: "center" }}
+    >
       <Modal.Header closeButton>
         <Modal.Title>{productSend.name}</Modal.Title>
       </Modal.Header>

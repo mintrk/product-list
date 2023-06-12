@@ -95,18 +95,31 @@ const AddEditProduct = ({
 
     return valid;
   };
+  const [imageExists, setImageExists] = useState(false);
+  const checkImageExists = () => {
+    const img = new Image();
+    img.src = productImage;
+
+    img.onerror = () => {
+      setImageExists(false);
+    };
+
+    img.onload = () => {
+      setImageExists(true);
+    };
+  };
 
   const handleAddProduct = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    checkImageExists();
     if (validateFields()) {
       const newProduct = {
         name: productName,
         detail: productDetail,
         price: Number(productPrice),
-        imageUrl:
-          productImage ||
-          "https://static.vecteezy.com/system/resources/previews/000/702/530/original/hand-holding-shopping-bags-vector.jpg",
+        imageUrl: imageExists
+          ? productImage
+          : "https://static.vecteezy.com/system/resources/previews/000/702/530/original/hand-holding-shopping-bags-vector.jpg",
       };
 
       onSubmit(newProduct);
@@ -134,8 +147,13 @@ const AddEditProduct = ({
         <form onSubmit={handleAddProduct}>
           {/* Name */}
           <div className="form-group">
-            <label>
-              Product:{" "}
+            <label className="d-block d-flex justify-content-between">
+              <div>
+                Product:{" "}
+                {!validateName.status && (
+                  <span style={{ color: "red" }}>*</span>
+                )}
+              </div>
               <span style={{ color: "red" }}>{validateName.message}</span>
             </label>
             <input
@@ -151,8 +169,13 @@ const AddEditProduct = ({
           </div>
           {/* Price */}
           <div className="form-group">
-            <label>
-              Price:{" "}
+            <label className="d-block d-flex justify-content-between">
+              <div>
+                Price:{" "}
+                {!validatePrice.status && (
+                  <span style={{ color: "red" }}>*</span>
+                )}
+              </div>
               <span style={{ color: "red" }}>{validatePrice.message}</span>
             </label>
             <input
@@ -168,8 +191,13 @@ const AddEditProduct = ({
           </div>
           {/* Detail */}
           <div className="form-group">
-            <label>
-              Details:{" "}
+            <label className="d-block d-flex justify-content-between">
+              <div>
+                Details:{" "}
+                {!validateDetail.status && (
+                  <span style={{ color: "red" }}>*</span>
+                )}
+              </div>
               <span style={{ color: "red" }}>{validateDetail.message}</span>
             </label>
             <input
@@ -185,7 +213,9 @@ const AddEditProduct = ({
           </div>
           {/* Image url */}
           <div className="form-group">
-            <label>Image Url: </label>
+            <label className="d-block d-flex justify-content-between">
+              Image Url:{" "}
+            </label>
             <input
               type="text"
               name="imageUrl"
@@ -200,7 +230,8 @@ const AddEditProduct = ({
             type="submit"
             variant="dark"
             className="mt-2"
-            style={{ marginRight: "1rem" }}>
+            style={{ marginRight: "1rem" }}
+          >
             {product ? "Update" : "Add"}
           </Button>
           <Button variant="light" onClick={handleCancel} className="mt-2">
