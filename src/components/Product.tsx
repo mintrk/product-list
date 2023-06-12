@@ -126,6 +126,11 @@ const Product = () => {
     isProductInfoUI(!productInfoUI);
     isAddProductUI(false);
   };
+
+  function numberWithCommas(x: number) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   return (
     <div className="product" id="product">
       <div className="container-fluid mt-4">
@@ -173,7 +178,7 @@ const Product = () => {
                 <div className="card-body">
                   <h3>{product.name}</h3>
                   <p>Detail : {product.detail}</p>
-                  <h5>Price : {product.price} THB</h5>
+                  <h5>Price : {numberWithCommas(product.price)} THB</h5>
                   <button
                     onClick={() => {
                       handleEditButton(index);

@@ -13,13 +13,16 @@ interface Props {
   productSend: Product;
 }
 
+function numberWithCommas(x: number) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 const ProductInfo = ({ handleProductClick, productSend }: Props) => {
   return (
     <Modal
       show={true}
       onHide={handleProductClick}
-      style={{ textAlign: "center" }}
-    >
+      style={{ textAlign: "center" }}>
       <Modal.Header closeButton>
         <Modal.Title>{productSend.name}</Modal.Title>
       </Modal.Header>
@@ -30,10 +33,12 @@ const ProductInfo = ({ handleProductClick, productSend }: Props) => {
           style={{ width: "300px" }}
         />
         <p>Detail : {productSend.detail}</p>
-        <h5>Price : {productSend.price} THB</h5>
+        <h5>Price : {numberWithCommas(productSend.price)} THB</h5>
       </Modal.Body>
       <Modal.Footer>
-        <button onClick={handleProductClick}>Close</button>
+        <button className="btn btn-dark" onClick={handleProductClick}>
+          Close
+        </button>
       </Modal.Footer>
     </Modal>
   );

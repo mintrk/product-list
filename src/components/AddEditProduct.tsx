@@ -138,6 +138,7 @@ const AddEditProduct = ({
     setProductImage("");
     onCancel();
   };
+
   return (
     <Modal show={true} onHide={onCancel}>
       <Modal.Header closeButton>
@@ -154,7 +155,9 @@ const AddEditProduct = ({
                   <span style={{ color: "red" }}>*</span>
                 )}
               </div>
-              <span style={{ color: "red" }}>{validateName.message}</span>
+              <span className="fw-light" style={{ color: "red" }}>
+                {validateName.message}
+              </span>
             </label>
             <input
               type="text"
@@ -176,7 +179,9 @@ const AddEditProduct = ({
                   <span style={{ color: "red" }}>*</span>
                 )}
               </div>
-              <span style={{ color: "red" }}>{validatePrice.message}</span>
+              <span className="fw-light" style={{ color: "red" }}>
+                {validatePrice.message}
+              </span>
             </label>
             <input
               type="number"
@@ -198,7 +203,9 @@ const AddEditProduct = ({
                   <span style={{ color: "red" }}>*</span>
                 )}
               </div>
-              <span style={{ color: "red" }}>{validateDetail.message}</span>
+              <span className="fw-light" style={{ color: "red" }}>
+                {validateDetail.message}
+              </span>
             </label>
             <input
               type="text"
@@ -230,8 +237,7 @@ const AddEditProduct = ({
             type="submit"
             variant="dark"
             className="mt-2"
-            style={{ marginRight: "1rem" }}
-          >
+            style={{ marginRight: "1rem" }}>
             {product ? "Update" : "Add"}
           </Button>
           <Button variant="light" onClick={handleCancel} className="mt-2">
